@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\order-service.Domain\order-service.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

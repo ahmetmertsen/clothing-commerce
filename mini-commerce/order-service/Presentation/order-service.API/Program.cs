@@ -1,3 +1,4 @@
+using order_service.Persistence;
 
 namespace order_service.API
 {
@@ -13,6 +14,8 @@ namespace order_service.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddPersistenceService(builder.Configuration);
 
             var app = builder.Build();
 
