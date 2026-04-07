@@ -11,8 +11,11 @@ namespace order_service.Domain.Enums
         Pending,
         StockReserved,
         PaymentPending,
-        Confirmed,
-        Failed,
-        Cancelled
+        Paid,
+        Preparing,
+        Shipped,
+        Delivered,
+        Cancelled,
+        Failed
     }
 }

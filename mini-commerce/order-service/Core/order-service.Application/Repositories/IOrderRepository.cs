@@ -14,5 +14,10 @@ namespace order_service.Application.Repositories
         Task AddAsync(Order order);
         void Update(Order order);
         Task SaveChangesAsync();
+
+        Task<Order?> GetByIdWithItemsAsync(Guid id);
+        Task<Order?> GetByOrderNumberWithItemsAsync(string orderNumber);
+        Task<List<Order>> GetByCustomerIdWithItemsAsync(Guid customerId);
+
     }
 }

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace order_service.Application.DTOs
+namespace order_service.Application.Dtos
 {
-    public class OrderItemDto
+    public class CreateOrderItemDto
     {
         public Guid ProductId { get; set; }
         public string ProductName { get; set; } = null!;
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
-        public decimal LineTotal { get; set; }
     }
 }

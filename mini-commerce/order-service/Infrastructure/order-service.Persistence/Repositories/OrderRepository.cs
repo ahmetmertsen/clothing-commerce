@@ -28,5 +28,23 @@ namespace order_service.Persistence.Repositories
         public void Update(Order order) => _context.Orders.Update(order);
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+
+        public async Task<Order?> GetByIdWithItemsAsync(Guid id) => 
+            await _context.Orders
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
+        public async Task<Order?> GetByOrderNumberWithItemsAsync(string orderNumber) =>
+            await _context.Orders
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
+
+        public async Task<List<Order>> GetByCustomerIdWithItemsAsync(Guid customerId) =>
+            await _context.Orders
+            .Include(o => o.OrderItems)
+            .Where(o => o.CustomerId == customerId)
+            .OrderByDescending(o => o.CreatedDate)
+            .ToListAsync();
+
     }
 }

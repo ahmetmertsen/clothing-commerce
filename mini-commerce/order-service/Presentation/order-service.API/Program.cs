@@ -1,4 +1,5 @@
 using order_service.Persistence;
+using order_service.Application;
 
 namespace order_service.API
 {
@@ -16,6 +17,7 @@ namespace order_service.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddPersistenceService(builder.Configuration);
+            builder.Services.AddApplicationService();
 
             var app = builder.Build();
 
