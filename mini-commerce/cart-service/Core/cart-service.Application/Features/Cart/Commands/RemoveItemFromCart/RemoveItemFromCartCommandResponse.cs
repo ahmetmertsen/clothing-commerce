@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace cart_service.Application.Features.Cart.Commands.RemoveItemFromCart
 {
-    internal class RemoveItemFromCartCommandResponse
+    public class RemoveItemFromCartCommandResponse
     {
+        public bool Succeeded { get; set; }
+        public string Message { get; set; } = null!;
+        public Guid CartId { get; set; }
     }
 }

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace cart_service.Application.Features.Cart.Commands.ClearCart
 {
-    internal class ClearCartCommandResponse
+    public class ClearCartCommandResponse
     {
+        public bool Succeeded { get; set; }
+        public string Message { get; set; } = null!;
+        public Guid CartId { get; set; }
     }
 }
