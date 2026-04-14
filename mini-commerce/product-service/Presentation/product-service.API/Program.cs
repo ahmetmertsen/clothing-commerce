@@ -1,4 +1,4 @@
-
+using product_service.Persistence;
 namespace product_service.API
 {
     public class Program
@@ -13,6 +13,8 @@ namespace product_service.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddPersistenceService(builder.Configuration);
 
             var app = builder.Build();
 
