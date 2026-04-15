@@ -17,5 +17,6 @@ namespace product_service.Application.Repositories
 
         Task<Product?> GetByIdWithVariantsAsync(Guid id);
         Task<ProductVariant?> GetVariantByIdAsync(Guid variantId);
+        Task AddVariantAsync(ProductVariant variant);
     }
 }

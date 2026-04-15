@@ -38,9 +38,9 @@ namespace product_service.Application.Features.Product.Commands.AddVariant
             }
 
             var variant = new ProductVariant(request.Size, request.Color, request.Sku, request.Price, request.StockQuantity);
+            variant.ProductId = product.Id;
 
-            product.Variants.Add(variant);
-            product.UpdatedDate = DateTime.UtcNow;
+            await _productRepository.AddVariantAsync(variant);
             await _productRepository.SaveChangesAsync();
 
             return new AddProductVariantCommandResponse

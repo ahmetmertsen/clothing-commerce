@@ -39,5 +39,7 @@ namespace product_service.Persistence.Repositories
 
         public async Task<ProductVariant?> GetVariantByIdAsync(Guid variantId) => await _context.ProductVariants
                 .FirstOrDefaultAsync(v => v.Id == variantId);
+
+        public async Task AddVariantAsync(ProductVariant variant) => await _context.ProductVariants.AddAsync(variant);
     }
 }
