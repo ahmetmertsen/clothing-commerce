@@ -1,3 +1,4 @@
+using payment_service.Persistence;
 
 namespace payment_service.API
 {
@@ -13,6 +14,8 @@ namespace payment_service.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddPersistenceServices(builder.Configuration);
 
             var app = builder.Build();
 

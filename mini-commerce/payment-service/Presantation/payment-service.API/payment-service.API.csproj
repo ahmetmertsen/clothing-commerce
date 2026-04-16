@@ -8,11 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\payment-service.Application\payment-service.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\payment-service.Infrastructure\payment-service.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\payment-service.Persistence\payment-service.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
