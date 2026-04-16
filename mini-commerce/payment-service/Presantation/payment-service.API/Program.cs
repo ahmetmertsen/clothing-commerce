@@ -1,3 +1,4 @@
+using payment_service.Application;
 using payment_service.Persistence;
 
 namespace payment_service.API
@@ -16,6 +17,7 @@ namespace payment_service.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddPersistenceServices(builder.Configuration);
+            builder.Services.AddApplicationService();
 
             var app = builder.Build();
 

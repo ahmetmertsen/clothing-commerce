@@ -12,7 +12,7 @@ using payment_service.Persistence.Context;
 namespace payment_service.Persistence.Migrations
 {
     [DbContext(typeof(PaymentServiceDbContext))]
-    [Migration("20260416193221_mig_1")]
+    [Migration("20260416200403_mig_1")]
     partial class mig_1
     {
         /// <inheritdoc />

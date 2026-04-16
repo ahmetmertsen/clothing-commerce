@@ -12,7 +12,7 @@ using cart_service.Persistence.Context;
 namespace cart_service.Persistence.Migrations
 {
     [DbContext(typeof(CartServiceDbContext))]
-    [Migration("20260408065306_mig_1")]
+    [Migration("20260416200515_mig_1")]
     partial class mig_1
     {
         /// <inheritdoc />

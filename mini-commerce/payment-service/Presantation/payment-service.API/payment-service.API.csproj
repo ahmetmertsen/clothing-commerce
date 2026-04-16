@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\payment-service.Application\payment-service.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\payment-service.Infrastructure\payment-service.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\payment-service.Persistence\payment-service.Persistence.csproj" />
