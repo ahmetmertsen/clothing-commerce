@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\shipment-service.Application\shipment-service.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\shipment-service.Infrastructure\shipment-service.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\shipment-service.Persistence\shipment-service.Persistence.csproj" />

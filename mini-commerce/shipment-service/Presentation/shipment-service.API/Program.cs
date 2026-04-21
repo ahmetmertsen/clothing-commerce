@@ -1,4 +1,6 @@
 using shipment_service.Persistence;
+using shipment_service.Application;
+
 namespace shipment_service.API
 {
     public class Program
@@ -15,6 +17,7 @@ namespace shipment_service.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddPersistenceService(builder.Configuration);
+            builder.Services.AddApplicationService();
 
             var app = builder.Build();
 
