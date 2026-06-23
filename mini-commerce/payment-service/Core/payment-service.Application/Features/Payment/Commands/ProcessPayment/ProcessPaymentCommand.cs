@@ -20,6 +20,6 @@ namespace payment_service.Application.Features.Payment.Commands.ProcessPayment
         public string Cvv { get; set; } = null!;
 
         public string PaymentMethod { get; set; } = "CreditCard";
-        public bool SimulateSuccess { get; set; }
+        public bool SimulateSuccess { get; set; } = true;
     }
 }
