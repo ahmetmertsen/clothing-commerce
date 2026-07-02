@@ -70,11 +70,13 @@ namespace auth_service.Persistence.Services
                 var correlationId = Guid.NewGuid();
                 var verificationCode = await _verificationChallengeService.CreateCodeAsync(user.Id, VerificationPurpose.EmailVerification, user.Email!, correlationId, cancellationToken);
 
-                var outboxToken = Guid.NewGuid();
+                var notificationOutboxToken = Guid.NewGuid();
+                var customerOutboxToken = Guid.NewGuid();
 
                 #region Notification Event
                 NotificationRequested notificationRequested = new()
                 {
+                    NotificationId = notificationOutboxToken,
                     RecipientUserId = user.Id,
                     RecipientEmail = user.Email,
                     Type = NotificationType.EmailVerification,
@@ -86,26 +88,30 @@ namespace auth_service.Persistence.Services
                         ["verification_code"] = verificationCode,
                         ["app_name"] = "Mini Commerce"
                     },
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    OccurredAt = DateTime.UtcNow
                 };
                 #endregion
 
-                #region AuthOutbox write
-                AuthOutbox authOutbox = new()
+                #region Customer Event
+                AuthUserRegisteredEvent authUserRegisteredEvent = new()
                 {
-                    IdempotentToken = outboxToken,
+                    EventId = customerOutboxToken,
+                    AuthUserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email!,
                     CorrelationId = correlationId,
-                    OccuredOn = DateTime.UtcNow,
-                    ProcessedDate = null,
-                    Status = AuthOutboxStatus.Pending,
-                    RetryCount = 0,
-                    MaxRetryCount = 5,
-                    IsSensitive = notificationRequested.IsSensitive,
-                    Payload = JsonSerializer.Serialize(notificationRequested),
-                    Type = notificationRequested.GetType().Name
+                    OccurredAt = DateTime.UtcNow,
                 };
 
-                await _context.AuthOutboxes.AddAsync(authOutbox, cancellationToken);
+                #endregion
+
+                #region AuthOutbox write
+                var notificationOutbox = CreateAuthOutboxMessage(notificationOutboxToken, correlationId, notificationRequested, notificationRequested.IsSensitive);
+                var customerOutbox = CreateAuthOutboxMessage(customerOutboxToken, correlationId, authUserRegisteredEvent, isSensitive: false);
+
+                await _context.AuthOutboxes.AddRangeAsync(new[] { notificationOutbox, customerOutbox }, cancellationToken);
+
                 await _context.SaveChangesAsync(cancellationToken);
                 #endregion
 
@@ -248,6 +254,8 @@ namespace auth_service.Persistence.Services
             var oldEmail = user.Email;
             await _verificationChallengeService.ValidateEmailChangeCodesAsync(user.Id, oldEmail, newEmail, request.OldEmailVerificationCode, request.NewEmailVerificationCode, cancellationToken);
 
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
             string token = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
             IdentityResult result = await _userManager.ChangeEmailAsync(user, newEmail, token);
 
@@ -256,10 +264,24 @@ namespace auth_service.Persistence.Services
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _userManager.UpdateAsync(user);
                 await _authSessionService.RevokeAllSessionsAsync(user.Id, "Email changed", cancellationToken);
-                /*
-                 Notificaiton-service için event yazılacak
-                await _mailService.SendMailAsync(oldEmail, "E-Posta Adresiniz Değiştirildi", "BlogApp hesabınızın e-posta adresi değiştirildi. Bu işlemi siz yapmadıysanız hesabınızı güvene alın.");
-                */
+
+                var correlationId = Guid.NewGuid();
+                var emailChangedOutboxToken = Guid.NewGuid();
+                AuthUserEmailChangedEvent authUserEmailChangedEvent = new()
+                {
+                    EventId = emailChangedOutboxToken,
+                    AuthUserId = user.Id,
+                    OldEmail = oldEmail!,
+                    NewEmail = newEmail,
+                    CorrelationId = correlationId,
+                    OccurredAt = DateTime.UtcNow
+                };
+
+                var emailChangedOutbox = CreateAuthOutboxMessage(emailChangedOutboxToken, correlationId, authUserEmailChangedEvent, isSensitive: false);
+                await _context.AuthOutboxes.AddAsync(emailChangedOutbox, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
                 return new UpdateUserEmailResponse
                 {
                     Succeeded = true,
@@ -432,6 +454,23 @@ namespace auth_service.Persistence.Services
             Id = user.Id,
             FullName = user.FullName
         });
+
+        private static AuthOutbox CreateAuthOutboxMessage<TMessage>(Guid idempotentToken, Guid correlationId, TMessage message, bool isSensitive)
+            where TMessage : class
+        {
+            return new AuthOutbox
+            {
+                IdempotentToken = idempotentToken,
+                CorrelationId = correlationId,
+                OccuredOn = DateTime.UtcNow,
+                Status = AuthOutboxStatus.Pending,
+                RetryCount = 0,
+                MaxRetryCount = 5,
+                IsSensitive = isSensitive,
+                Payload = JsonSerializer.Serialize(message),
+                Type = typeof(TMessage).Name
+            };
+        }
 
         private static string GetIdentityErrors(IdentityResult result) => string.Join(", ", result.Errors.Select(error => error.Description));
 

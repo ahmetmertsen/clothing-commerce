@@ -12,10 +12,7 @@ namespace auth_service.API.Jobs
         private readonly IOptions<AuthOutboxOptions> _options;
         private readonly ILogger<AuthOutboxCleanupJob> _logger;
 
-        public AuthOutboxCleanupJob(
-            IAuthOutboxRepository outboxRepository,
-            IOptions<AuthOutboxOptions> options,
-            ILogger<AuthOutboxCleanupJob> logger)
+        public AuthOutboxCleanupJob(IAuthOutboxRepository outboxRepository, IOptions<AuthOutboxOptions> options, ILogger<AuthOutboxCleanupJob> logger)
         {
             _outboxRepository = outboxRepository;
             _options = options;

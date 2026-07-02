@@ -30,13 +30,27 @@ namespace auth_service.Infrastructure.Outbox
             switch (message)
             {
                 case NotificationRequested notificationRequested:
-                    var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitMQSettings.NotificationRequestedQueue}"));
-                    await endpoint.Send(notificationRequested, cancellationToken);
+                    await SendToQueueAsync(RabbitMQSettings.NotificationRequestedQueue, notificationRequested, cancellationToken);
+                    break;
+
+                case AuthUserRegisteredEvent authUserRegisteredEvent:
+                    await SendToQueueAsync(RabbitMQSettings.AuthCustomerEventsQueue, authUserRegisteredEvent, cancellationToken);
+                    break;
+
+                case AuthUserEmailChangedEvent authUserEmailChangedEvent:
+                    await SendToQueueAsync(RabbitMQSettings.AuthCustomerEventsQueue, authUserEmailChangedEvent, cancellationToken);
                     break;
 
                 default:
                     throw new InvalidOperationException($"Auth outbox message type is resolved but not publishable. Type: {outboxMessage.Type}");
             }
+        }
+
+        private async Task SendToQueueAsync<TMessage>(string queueName, TMessage message, CancellationToken cancellationToken)
+            where TMessage : class
+        {
+            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
+            await endpoint.Send(message, cancellationToken);
         }
     }
 }

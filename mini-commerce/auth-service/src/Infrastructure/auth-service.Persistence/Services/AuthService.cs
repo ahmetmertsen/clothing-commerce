@@ -149,6 +149,7 @@ namespace auth_service.Persistence.Services
             #region Notification Event
             NotificationRequested notificationRequested = new()
             {
+                NotificationId = outboxToken,
                 RecipientUserId = user.Id,
                 RecipientEmail = user.Email,
                 Type = NotificationType.PasswordReset,
@@ -223,6 +224,7 @@ namespace auth_service.Persistence.Services
             #region Notification Event
             NotificationRequested notificationRequested = new()
             {
+                NotificationId = outboxToken,
                 RecipientUserId = user.Id,
                 RecipientEmail = user.Email,
                 Type = NotificationType.EmailVerification,
@@ -302,6 +304,7 @@ namespace auth_service.Persistence.Services
             #region Notification Event
             NotificationRequested notificationRequestedOld = new()
             {
+                NotificationId = oldOutboxToken,
                 RecipientUserId = user.Id,
                 RecipientEmail = user.Email,
                 Type = NotificationType.EmailChangeOld,
@@ -318,6 +321,7 @@ namespace auth_service.Persistence.Services
             };
             NotificationRequested notificationRequestedNew = new()
             {
+                NotificationId = newOutboxToken,
                 RecipientUserId = user.Id,
                 RecipientEmail = newEmail,
                 Type = NotificationType.EmailChangeNew,

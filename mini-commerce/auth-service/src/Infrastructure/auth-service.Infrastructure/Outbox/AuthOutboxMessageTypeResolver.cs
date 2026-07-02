@@ -7,7 +7,11 @@ namespace auth_service.Infrastructure.Outbox
         private static readonly IReadOnlyDictionary<string, Type> MessageTypes = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
         {
             [nameof(NotificationRequested)] = typeof(NotificationRequested),
-            [typeof(NotificationRequested).FullName!] = typeof(NotificationRequested)
+            [typeof(NotificationRequested).FullName!] = typeof(NotificationRequested),
+            [nameof(AuthUserRegisteredEvent)] = typeof(AuthUserRegisteredEvent),
+            [typeof(AuthUserRegisteredEvent).FullName!] = typeof(AuthUserRegisteredEvent),
+            [nameof(AuthUserEmailChangedEvent)] = typeof(AuthUserEmailChangedEvent),
+            [typeof(AuthUserEmailChangedEvent).FullName!] = typeof(AuthUserEmailChangedEvent)
         };
 
         public static Type Resolve(string type)

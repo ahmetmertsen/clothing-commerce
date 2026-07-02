@@ -15,11 +15,7 @@ namespace auth_service.API.Jobs
         private readonly IOptions<AuthOutboxOptions> _options;
         private readonly ILogger<AuthOutboxDispatcherJob> _logger;
 
-        public AuthOutboxDispatcherJob(
-            IAuthOutboxRepository outboxRepository,
-            IAuthOutboxMessagePublisher messagePublisher,
-            IOptions<AuthOutboxOptions> options,
-            ILogger<AuthOutboxDispatcherJob> logger)
+        public AuthOutboxDispatcherJob(IAuthOutboxRepository outboxRepository, IAuthOutboxMessagePublisher messagePublisher, IOptions<AuthOutboxOptions> options, ILogger<AuthOutboxDispatcherJob> logger)
         {
             _outboxRepository = outboxRepository;
             _messagePublisher = messagePublisher;

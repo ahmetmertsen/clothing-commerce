@@ -10,5 +10,6 @@ namespace Shared.Settings
     {
         public const string CheckoutStateMachineQueue = "checkout-state-machine-queue";
         public const string NotificationRequestedQueue = "notification-requested-queue";
+        public const string AuthCustomerEventsQueue = "auth-customer-events-queue";
     }
 }
